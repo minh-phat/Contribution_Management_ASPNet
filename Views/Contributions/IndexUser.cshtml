@@ -1,0 +1,444 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@model IEnumerable<SchoolProject1640.Models.Contribution>
+
+@{
+    ViewData["Title"] = "Index";
+    var getFacultyOfStudent = ViewBag.getFacultyOfStudent;
+    var articles = ViewBag.listArt as IEnumerable<Article>;
+    var getId = ViewBag.idUser;
+    var listNameUser = ViewBag.listNameUSer as IEnumerable<ApplicationUser>;
+    var listNameFac = ViewBag.listNameFaculty as IEnumerable<Faculty>;
+
+}
+
+@if (ViewBag.Success != null && ViewBag.Success != "")
+{
+    <div class="alert alert-success">
+        @ViewBag.Success
+    </div>
+}
+
+@if (User.IsInRole("Student"))
+{
+    <div class="p-10 text-black sm:px-0">
+
+        @foreach (var item in Model)
+        {
+            @if (item.Faculty == getFacultyOfStudent)
+            {
+                <div class="px-5 sm:px-0">
+                    <div class="flex flex-col bg-[#F2EAE5] mb-10 px-5 rounded-xl py-3">
+                        <div class="flex items-center justify-between space-y-2">
+                            <div class="font-bold text-[20px]">
+                                @item.Title
+                            </div>
+                            <form class="bg-[#FD7401] font-bold flex justify-center items-center w-[130px] text-white px-3 py-2 rounded-xl" asp-action="Create" asp-controller="Articles" method="get">
+                                <input type="hidden" name="id" value="@item.Id" />
+                                <button type="submit" class="btn btn-link">
+                                    Add Articles
+                                </button>
+                            </form>
+                        </div>
+
+                        <div class="text-[#494949] text-[15px] -mt-2 mb-2">
+                            Submit deadline: @Html.DisplayFor(modelItem => item.ClosureDate)
+                        </div>
+                        <div class="text-[#494949] text-[15px] -mt-2 mb-2">
+                            Update deadline: @Html.DisplayFor(modelItem => item.FinalClosureDate)
+                        </div>
+                        @if (articles != null)
+                        {
+                            <div class="py-3">
+                                <table class="w-full">
+                                    <thead>
+                                        <tr class="w-full">
+                                            <th class="w-[30%] text-left">Title</th>
+                                            <th class="w-[20%] text-left">State</th>
+                                            <th class="w-[10%] text-left">View</th>
+                                            <th class="w-[10%] text-left">Action</th>
+                                        </tr>
+                                    </thead>
+                                    @foreach (var art in articles)
+                                    {
+                                        if (art.ContributionId == item.Id)
+                                        {
+                                            if (getId == art.AccountId)
+                                            {
+                                                <tr>
+                                                    <td>@art.Title</td>
+                                                    <td>
+                                                        @{
+                                                            string stateText;
+                                                            string colorCode;
+                                                            switch (art.State)
+                                                            {
+                                                                case 0:
+                                                                    stateText = "Pending";
+                                                                    colorCode = "orange"; // You can change this to any color you want
+                                                                    break;
+                                                                case 1:
+                                                                    stateText = "Accepted";
+                                                                    colorCode = "green"; // You can change this to any color you want
+                                                                    break;
+                                                                case 2:
+                                                                    stateText = "Rejected";
+                                                                    colorCode = "red"; // You can change this to any color you want
+                                                                    break;
+                                                                default:
+                                                                    stateText = "Unknown";
+                                                                    colorCode = "black"; // You can change this to any color you want
+                                                                    break;
+                                                            }
+                                                        }
+                                                        <span style="color: @colorCode;">@stateText</span>
+                                                    </td>
+                                                    @*                                                     <td>
+                        <!-- Form to download the file -->
+                        <form asp-action="DownloadFile" asp-controller="Articles" method="post">
+                        <input type="hidden" name="fileName" value="@art.FileName" />
+                        <button type="submit">Download</button>
+                        </form>
+                        </td> *@
+                                                    <td>
+                                                        <!-- Form to view the content of the file -->
+                                                        <form asp-action="ViewFile" asp-controller="Articles" method="post">
+                                                            <input type="hidden" name="fileName" value="@art.FileName" />
+                                                            <button type="submit"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                                                        </form>
+                                                    </td>
+                                                    <td>
+                                                        <div class="flex space-x-5">
+                                                            <a asp-controller="Articles" asp-action="Details" asp-route-id="@art.Id">
+                                                                <i class="fa fa-pencil-square-o text-[#E65F2B]" aria-hidden="true"></i>
+                                                            </a>
+                                                            <form asp-controller="Articles" method="post" asp-action="Delete">
+                                                                <input type="hidden" name="id" id="id" value="@art.Id" />
+                                                                <button type="submit" value="Delete" class="btn btn-danger text-[#F20000]"><i class="fa fa-trash text-center " aria-hidden="true"></i></button>
+                                                            </form>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    }
+                                </table>
+
+                            </div>
+                        }
+                    </div>
+                </div>
+
+            }
+
+        }
+
+
+    </div>
+}
+@if (User.IsInRole("Administrator") || User.IsInRole("Manager"))
+{
+    <div class="p-10 h-[400px] text-black sm:px-0 space-y-5">
+        @foreach (var item in Model)
+        {
+            <div class="px-5 h-[400px] sm:px-0">
+                <div class="h-[400px] flex flex-col bg-[#F2EAE5] mb-10 px-5 rounded-xl py-3">
+                    <div class="flex justify-between items-center">
+                        <div class="flex flex-col ">
+                            <div class="font-bold text-[20px]">
+                                @if (listNameFac != null)
+                                {
+                                    foreach (var tempName in listNameFac)
+                                    {
+                                        if (tempName.Id == item.Faculty)
+                                        {
+                                            @tempName.Name
+                                        }
+                                    }
+                                }
+                            </div>
+                            <div class="text-[#494949] text-[15px] ">
+                                Deadline: @Html.DisplayFor(modelItem => item.ClosureDate)
+                            </div>
+                        </div>
+
+                        <div class="flex items-center mb-4">
+                            <div class="mr-4">
+                                <label class="text-[#494949] text-[15px] py-1">
+                                    <input type="checkbox" id="selectAllCheckbox_@item.Id" class="selectAllCheckbox mr-2">
+                                    Select All
+                                </label>
+                            </div>
+                            <button class="downloadButton bg-[#FD7401] text-black font-bold py-2 px-4 rounded">Download</button>
+                        </div>
+                    </div>
+
+                    @if (articles != null)
+                    {
+                        <div class="py-3 h-[600px] overflow-y-scroll whitespace-nowrap scroll-smooth">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="w-full">
+                                        <th class="w-[5%] text-left">Select</th>
+                                        <th class="w-[30%] text-left">Title</th>
+                                        <th class="w-[20%] text-left">State</th>
+                                        <th class="w-[20%] text-left">Public for guest</th>
+                                        <th class="w-[10%] text-left">View</th>
+                                        <th class="w-[10%] text-left">Download</th>
+                                        <th class="w-[10%] text-left">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var art in articles)
+                                    {
+                                        if (art.ContributionId == item.Id)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <input type="checkbox" name="selectedFiles_@item.Id" value="@art.FileName" />
+                                                </td>
+                                                <td>@art.Title</td>
+                                                <td>
+                                                    @{
+                                                        string stateText;
+                                                        string colorCode;
+                                                        switch (art.State)
+                                                        {
+                                                            case 0:
+                                                                stateText = "Pending";
+                                                                colorCode = "orange"; // You can change this to any color you want
+                                                                break;
+                                                            case 1:
+                                                                stateText = "Accepted";
+                                                                colorCode = "green"; // You can change this to any color you want
+                                                                break;
+                                                            case 2:
+                                                                stateText = "Rejected";
+                                                                colorCode = "red"; // You can change this to any color you want
+                                                                break;
+                                                            default:
+                                                                stateText = "Unknown";
+                                                                colorCode = "black"; // You can change this to any color you want
+                                                                break;
+                                                        }
+                                                    }
+                                                    <span style="color: @colorCode;">@stateText</span>
+                                                </td>
+                                                <td>@art.isPublicForGuest</td>
+                                                <td>
+                                                    <!-- Form to view the content of the file -->
+                                                    <form asp-action="ViewFile" asp-controller="Articles" method="post">
+                                                        <input type="hidden" name="fileName" value="@art.FileName" />
+                                                        <button type="submit"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                                                    </form>
+                                                </td>
+                                                <td>
+                                                    <!-- Form to download the file -->
+                                                    <form asp-action="DownloadFile" asp-controller="Articles" method="post">
+                                                        <input type="hidden" name="fileName" value="@art.FileName" />
+                                                        <button type="submit">
+                                                            <i class="fa fa-download text-[#F20000]" aria-hidden="true"></i>
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                                <td class="">
+                                                    <form asp-controller="Articles" method="post" asp-action="Delete">
+                                                        <input type="hidden" name="id" id="id" value="@art.Id" />
+                                                        <button type="submit" value="Delete" class="btn btn-danger text-[#F20000]">
+                                                            <i class="fa fa-trash text-center" aria-hidden="true"></i>
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
+    </div>
+}
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.selectAllCheckbox').click(function () {
+                var itemId = $(this).attr('id').split('_')[1];
+                $('input[name="selectedFiles_' + itemId + '"]').prop('checked', this.checked);
+            });
+
+            $('.downloadButton').click(function () {
+                var itemId = $(this).closest('.flex').find('.selectAllCheckbox').attr('id').split('_')[1];
+                var selectedFiles = [];
+                $('input[name="selectedFiles_' + itemId + '"]:checked').each(function () {
+                    selectedFiles.push($(this).val());
+                });
+
+                // Construct the form to submit the selected files
+                var form = $('<form action="@Url.Action("DownloadMultipleFiles", "Articles")" method="post"></form>');
+                $.each(selectedFiles, function (index, value) {
+                    form.append($('<input type="hidden" name="fileNames" value="' + value + '" />'));
+                });
+
+                // Submit the form to trigger the file download
+                form.appendTo('body').submit().remove();
+            });
+        });
+    </script>
+}
+
+
+
+@if (User.IsInRole("Coordinator"))
+{
+
+    <div class="p-10 text-black sm:px-0">
+        @foreach (var item in Model)
+        {
+
+            @if (item.Faculty == getFacultyOfStudent)
+            {
+                <div class="px-5 sm:px-0">
+                    <div class="flex flex-col bg-[#F2EAE5] mb-10 px-5 rounded-xl py-3">
+                        <div class="flex items-center justify-between space-y-2">
+                            <div class="font-bold text-[20px]">
+                                @if (listNameFac != null)
+                                {
+                                    foreach (var tempName in listNameFac)
+                                    {
+                                        @if (tempName.Id == item.Faculty)
+                                        {
+                                            @tempName.Name
+                                            ;
+                                        }
+                                    }
+                                    //(Juno quên Cách đổi tên ngành ở đây rồi hì:)) =>)
+                                }
+                            </div>
+
+                        </div>
+
+                        <div class="text-[#494949] text-[15px] -mt-2 mb-2">
+                            Deadline : @Html.DisplayFor(modelItem => item.ClosureDate)
+                        </div>
+                        @if (articles != null)
+                        {
+                            <div class="py-3">
+                                <table class="w-full">
+                                    <thead>
+                                        <tr class="w-full">
+                                            <th class="w-[30%] text-left">Title</th>
+                                            <th class="w-[20%] text-left">State</th>
+                                            <th class="w-[20%] text-left">Public for guest</th>
+                                            <th class="w-[10%] text-left">View Docx</th>
+                                            <th class="w-[10%] text-left">View Image</th>
+                                            <th class="w-[10%] text-left">Action</th>
+                                        </tr>
+                                    </thead>
+                                    @foreach (var art in articles)
+                                    {
+                                        if (art.ContributionId == item.Id)
+                                        {
+
+                                            <tr>
+                                                <td>@art.Title</td>
+                                                <td>
+                                                    @{
+                                                        string stateText;
+                                                        string colorCode;
+                                                        switch (art.State)
+                                                        {
+                                                            case 0:
+                                                                stateText = "Pending";
+                                                                colorCode = "orange"; // You can change this to any color you want
+                                                                break;
+                                                            case 1:
+                                                                stateText = "Accepted";
+                                                                colorCode = "green"; // You can change this to any color you want
+                                                                break;
+                                                            case 2:
+                                                                stateText = "Rejected";
+                                                                colorCode = "red"; // You can change this to any color you want
+                                                                break;
+                                                            default:
+                                                                stateText = "Unknown";
+                                                                colorCode = "black"; // You can change this to any color you want
+                                                                break;
+                                                        }
+                                                    }
+                                                    <span style="color: @colorCode;">@stateText</span>
+                                                </td>
+                                                <td>
+                                                    <select id="isPublicForGuestSelect" onchange="updatePublicForGuest(@art.Id)">
+                                                        <option value="true" selected="@(art.isPublicForGuest ?? false ? "selected" : null)">true</option>
+                                                        <option value="false" selected="@(art.isPublicForGuest ?? false ? null : "selected")">false</option>
+                                                    </select>
+                                                </td>
+                                                <script>
+                                                    function updatePublicForGuest(id) {
+                                                        var selectedValue = document.getElementById("isPublicForGuestSelect").value;
+
+                                                        // Make AJAX request to call the UpdatePublicForGuest function
+                                                        fetch('@Url.Action("UpdatePublicForGuest", "Articles")?id=' + id + '&isPublicForGuest=' + selectedValue, {
+                                                            method: 'POST',
+                                                            headers: {
+                                                                'Content-Type': 'application/json'
+                                                            }
+                                                        })
+                                                            .then(response => {
+                                                                if (!response.ok) {
+                                                                    throw new Error('Network response was not ok');
+                                                                }
+                                                                // Handle successful response if needed
+                                                            })
+                                                            .catch(error => {
+                                                                console.error('There was a problem with the fetch operation:', error);
+                                                            });
+                                                    }
+                                                </script>
+
+
+
+                                                @*                                                     <td>
+                        <!-- Form to download the file -->
+                        <form asp-action="DownloadFile" asp-controller="Articles" method="post">
+                        <input type="hidden" name="fileName" value="@art.FileName" />
+                        <button type="submit">Download</button>
+                        </form>
+                        </td> *@
+                                                <td>
+                                                    <!-- Form to view the content of the file -->
+                                                    <form asp-action="ViewFile" asp-controller="Articles" method="post">
+                                                        <input type="hidden" name="fileName" value="@art.FileName" />
+                                                        <button type="submit"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                                                    </form>
+                                                </td>
+                                                <td>
+                                                    <img height="100px" width="100px" src="/imageArticle/@art.Image" />
+                                                </td>
+                                                <td class="text-center">
+                                                    <a asp-controller="Articles" asp-action="Details" asp-route-id="@art.Id">
+                                                        <i class="fa fa-pencil-square-o text-[#E65F2B]" aria-hidden="true"></i>
+                                                    </a>
+                                                </td>
+
+                                            </tr>
+
+                                        }
+                                    }
+                                </table>
+
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+        }
+    </div>
+}

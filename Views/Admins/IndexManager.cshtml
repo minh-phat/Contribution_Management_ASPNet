@@ -1,0 +1,113 @@
+﻿@{
+    ViewData["Title"] = "Accounts Management";
+}
+
+
+
+<div class="p-10 text-black sm:px-0 h-screen">
+
+
+    <div class="px-5 sm:px-0 w-full h-full">
+        <div class="w-full h-[700px] flex flex-col bg-[#F2EAE5] mb-10 px-5 rounded-xl py-3">
+            <div class="w-full text-center font-bold text-[50px]">Account</div>
+            <div class="flex flex-row justify-between py-3">
+                <div class="input-group mb-3">
+                    <input type="text" class="h-[45px] w-[200px] bg-[#B0B0B0] px-5 rounded-lg text-black placeholder-black " id="searchBar" placeholder="Search by Email">
+                </div>
+            </div>
+            <div class="py-3 h-[600px] overflow-y-scroll whitespace-nowrap scroll-smooth">
+                <table class="w-full">
+                    <thead>
+                        <tr class="w-full">
+                            <th class="w-[%] text-left">Image</th>
+                            <th class="w-[%] text-left">Email</th>
+                            <th class="w-[%] text-left">First Name</th>
+                            <th class="w-[%] text-left">Last Name</th>
+                            <th class="w-[%] text-left">Faculty</th>
+                            <th class="w-[%] text-left">Role</th>
+                            <th class="w-[%] text-left">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table">
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Get all accounts data from database on page starts
+            loadData();
+
+            // Update data when search input is changed
+            $('#searchBar').on("input", function () {
+                loadData();
+            });
+
+            // Update data when search button is clicked
+            $("#searchButton").on("click", function () {
+                loadData();
+            });
+
+            // Fetch data from database
+            function loadData() {
+                var email = $('#searchBar').val();
+                $.ajax({
+                    url: '@Url.Action("IndexManagerValue", "Admins")',
+                    type: 'GET',
+                    data: { email: email },
+                    success: function (data) {
+                        populateTale(data, email);
+                    },
+                    error: function () {
+                        $('#table').empty();
+                        $('#table').append('<tr><td colspan="7" class="text-center text-danger">Error searching accounts. Please try again later.</td></tr>');
+                    }
+                });
+            }
+
+            // Populate table with data from database
+            function populateTale(data, email) {
+                $('#table').empty();
+
+                if (data && data.length > 0) {
+                    $.each(data, function (index, user) {
+                        var imageSrc = user.user.image ? "/imageUser/" + user.user.image : "/imageUser/ImageDefaultUser.png";
+                        var updateUrl = `/Admins/Update/${user.user.id}`;
+                        var deleteUrl = `/Admins/Delete/${user.user.id}`;
+                        var row =
+                            `<tr class="w-full h-full ">
+                                    <td class="py-5 "><img class="rounded-full" src="${imageSrc}" width="80" height="80" alt="User Image"></td>
+                                        <td>${user.user.email}</td>
+                                        <td>${user.user.firstName}</td>
+                                        <td>${user.user.lastName}</td>
+                                        <td>${user.facultyName}</td>
+                                        <td>${user.roleName}</td>
+                                        <td class=" h-full ">
+                                            <div class="flex space-x-5">
+                                                    <a href="${updateUrl}" class="text-decoration-none">
+                                                               <button type="button" class="btn btn-primary py-2"><i class="fa fa-pencil-square-o text-[#E65F2B]" aria-hidden="true"></i></button>
+                                                    </a>
+                                                    <form id="deleteForm" action="/Admins/Delete" method="post">
+                                                        <input type="hidden" id="id" name="id" value="${user.user.id}">
+                                                                        <button type="submit" class="btn btn-danger py-2 text-[#F20000]" onclick="return confirm('Are you sure you want to delete ${user.user.email} account?')"><i class="fa fa-trash text-center" aria-hidden="true"></i></button>
+                                                    </form> </div>
+                                                </td>
+                                    </tr>`;
+                        $('#table').append(row);
+                    });
+                } else {
+                    $('#table').append(`<tr><td colspan="7" class="text-center">No data found for ${email}.</td></tr>`);
+                }
+            }
+        })
+    </script>
+}

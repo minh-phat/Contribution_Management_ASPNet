@@ -1,0 +1,88 @@
+﻿@model SchoolProject1640.Models.TermAndCon
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="flex justify-center">
+    <div class="w-[80%] text-center py-10 sm:w-[100%] ">
+        <div class="flex w-full">
+            <div class="w-full text-black space-y-5">
+                <div class="bg-[#F2EAE5] rounded-l-xl w-full h-[800px] space-y-4 2xl: lg: sm:rounded-t-lg sm:h-[800px]">
+                    <div class="w-full h-[800px] flex 2xl: lg: sm:flex-col sm:h-[700px]">
+                        <div class="w-[25%] h-[800px] text-left bg-[#474341] rounded-l-xl flex items-center justify-center 2xl: lg: sm:w-full sm:rounded-lg sm:h-[200px]">
+                            <div class="-rotate-90 text-white font-bold text-[60px] 2xl: lg: sm:rotate-0 sm:text-[50px]">
+                                <div class="w-[700px] text-center">Terms And Condition</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center w-[75%] h-[800px] text-left py-10  sm:py-3 sm:w-full">
+
+                            <form asp-action="Edit"
+                                  class="w-full flex flex-col items-center space-y-4">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input type="hidden" asp-for="Id" />
+
+                                <div class="text-[16px] space-y-1 sm:text-[14px]">
+                                    <label asp-for="TermsAndCondition" class="text-black font-medium text-[18px]">Terms And Condition</label>
+                                    <div class="flex items-center justify-end">
+                                        <textarea asp-for="TermsAndCondition" class="h-[500px] w-[600px] bg-[#B0B0B0] px-5 rounded-lg text-black placeholder-black 2xl:w-[400px] lg:w-[400px] sm:w-[350px]"
+                                                  type="text"></textarea>
+                                    </div>
+                                    <span asp-validation-for="TermsAndCondition" class="text-danger"></span>
+                                </div>
+
+                                
+
+                               
+
+
+
+                                <div class="py-3">
+                                    <div class="text-[16px] space-y-1 sm:text-[14px]">
+                                        <div class="h-[100px]">
+                                            <button type="submit" value="Save" class="h-[45px] w-[200px] bg-[#FD7401] px-5 rounded-lg text-black placeholder-black font-medium text-[15px] space-x-2 flex items-center justify-center 2xl:">
+                                                <div class="text-white font-bold text-[20px]">
+                                                    Submit
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="TermsAndCondition" class="control-label"></label>
+                <textarea asp-for="TermsAndCondition" class="form-control w-80" rows="12"></textarea>
+                <span asp-validation-for="TermsAndCondition" class="text-danger"></span>
+            </div>
+            <input asp-for="CreatedAt" class="form-control" hidden />
+            <input asp-for="UpdatedAt" class="form-control" hidden/>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,122 @@
+﻿﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@model SchoolProject1640.Models.ModelOfView.StudentDashboard
+@{
+}
+@if (User.IsInRole("Student"))
+{
+    <div class="px-16 py-8 w-full h-[900px] flex text-black sm:px-1">
+
+        <div class="w-full h-full bg-[#EBDFD7] py-5 px-3 ">
+
+            <div class="w-full h-[90%] space-y-10 ">
+                <div class="px-5 py-5 w-full h-[200px] grid grid-cols-4 text-black lg:grid-cols-2 lg:h-[400px] gap-4 ">
+                    <div class="w-full h-full bg-[#F2EAE5] flex flex-col space-y-1 px-3 py-3 rounded-xl">
+                        <div class="bg-[#F995A7] rounded-full w-14 h-14 flex items-center justify-center">
+                            <Icon class="w-10 h-10" name="mdi:file-outline" />
+                        </div>
+
+                        <div class="text-[#797979] font-medium text-[18px]">
+                            Total my article
+                        </div>
+                        <div id="totalArticles" class="text-[40px] font-bold">@Model.TotalArticleStudent</div>
+                    </div>
+                    <div class="w-full h-full bg-[#F2EAE5] flex flex-col space-y-1 px-3 py-3 rounded-xl">
+                        <div class="bg-[#7CC2F2] rounded-full w-14 h-14 flex items-center justify-center">
+                            <Icon class="w-10 h-10" name="ph:bag-bold" />
+                        </div>
+                        <div class="text-[#797979] font-medium text-[18px]">
+                            Accept
+                        </div>
+                        <div id="Accept" class="text-[40px] font-bold">@Model.ArticleAcceptStudent</div>
+                    </div>
+                    <div class="w-full h-full bg-[#F2EAE5] flex flex-col space-y-1 px-3 py-3 rounded-xl">
+                        <div class="bg-[#F8D88D] rounded-full w-14 h-14 flex items-center justify-center">
+                            <Icon class="w-10 h-10" name="icon-park-outline:peoples" />
+                        </div>
+                        <div class="text-[#797979] font-medium text-[18px]">
+                            Pending
+                        </div>
+                        <div id="Pending" class="text-[40px] font-bold">@Model.ArticlePendingStudent </div>
+                    </div>
+                    <div class="w-full h-full bg-[#F2EAE5] flex flex-col space-y-1 px-3 py-3 rounded-xl">
+                        <div class="bg-[#F8D88D] rounded-full w-14 h-14 flex items-center justify-center">
+                            <Icon class="w-10 h-10" name="icon-park-outline:peoples" />
+                        </div>
+                        <div class="text-[#797979] font-medium text-[18px]">
+                            Rejected
+                        </div>
+                        <div id="Reject" class="text-[40px] font-bold">@Model.ArticleRejectedStudent </div>
+                    </div>
+                </div>
+                <div class="px-5 w-full  flex space-x-5 lg:flex-col lg:space-y-5 lg:space-x-0">
+                    <div class="bg-[#F2EAE5] w-[49%] h-[500px] p-5 rounded-xl space-y-4 text-center lg:w-[100%] ">
+                        <div class="font-bold text-[20px] text-center">
+                            Bảng Xếp Hạng Bé Khỏe Bé Ngoan
+                        </div>
+                       
+                    </div>
+
+                    <div class="bg-[#F2EAE5] w-[49%] h-[500px] p-5 rounded-xl space-y-4 text-center lg:w-[100%]">
+                        <div class="font-bold text-[20px] text-center">
+                            Chart
+                        </div>
+                        <div>
+                            <canvas id="articleChart" width="400" height="400"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+
+}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Retrieve statistics passed from the controller
+        var articleAccepted = parseInt(document.getElementById('Accept').textContent);
+        var articlePending = parseInt(document.getElementById('Pending').textContent);
+        var articleRejected = parseInt(document.getElementById('Reject').textContent);
+
+        // Prepare data for the chart
+        var data = {
+            labels: ['Accepted', 'Pending', 'Rejected'],
+            datasets: [{
+                label: 'Article Statistics',
+                data: [articleAccepted, articlePending, articleRejected],
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(255, 99, 132, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(255, 99, 132, 1)'
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        // Options for the chart
+        var options = {
+            responsive: true,
+            maintainAspectRatio: false
+        };
+
+        // Get the context of the canvas element
+        var ctx = document.getElementById('articleChart').getContext('2d');
+
+        // Create the pie chart
+        var myChart = new Chart(ctx, {
+            type: 'pie',
+            data: data,
+            options: options
+        });
+    });
+</script>

@@ -1,0 +1,388 @@
+﻿@{
+    ViewData["Title"] = "Details";
+    var currentUser = ViewBag.User
+        .Replace("\\", "\\\\")
+        .Replace("'", "\\'");
+    var articleId = ViewBag.Article.Article.Id;
+    var idArticle = ViewBag.FileName;
+}
+@if (User.IsInRole("Student") )
+{
+    <div class="flex justify-center">
+        <div class="w-[80%] text-center py-10 lg:w-[100%]">
+            <div class="flex w-full">
+                <div class="w-full text-black space-y-5">
+                    <div class="bg-[#F2EAE5] rounded-l-xl w-full h-[650px] space-y-4 2xl: lg: sm:rounded-t-lg sm:h-[680px]">
+                        <div class="w-full hidden sm:block">
+                            <div class="text-[50px] mb-10 font-bold">Update</div>
+
+                            <div class="w-full flex justify-center items-center space-x-3">
+                                <form class="bg-[#F0D1C4] px-7 py-2 text-xl mb-10 rounded-2xl " asp-action="ViewFile" asp-controller="Articles" method="post">
+                                    <input type="hidden" name="fileName" value="@idArticle" />
+                                    <button type="submit" class="text-[#E65F2B]">View</button>
+                                </form>
+                                <a class="bg-[#CBDAC4] px-7 py-2 text-xl mb-10 rounded-2xl text-[#1A932E]" asp-controller="Articles" asp-action="Edit" asp-route-id="@ViewBag.Article.Article.Id">
+                                    Edit
+                                </a>
+                            </div>
+                        </div>
+                        <div class="w-full h-[650px] flex 2xl: lg: sm:flex-col sm:h-[700px]">
+                            <div class="w-[70%] h-[650px] text-left bg-[#474341] rounded-l-xl px-6 py-8 sm:rounded-lg sm:w-[100%] sm:h-[680px]">
+                                <div class="bg-[#F2EAE5] w-full h-full rounded-xl px-5 py-5 space-y-4">
+                                    <div class="w-full ">
+                                        <ul id="messagesList" class="chat-list h-[500px] overflow-y-scroll whitespace-nowrap scroll-smooth">
+                                            @foreach (var message in ViewBag.Messages)
+                                            {
+                                                @if (message.Account.Id == ViewBag.User)
+                                                {
+                                                    <li class="out">
+                                                        <div class="chat-img">
+                                                            <img src="@Url.Content($"/imageUser/{message.Account.Image}")" alt="avatar" />
+                                                        </div>
+                                                        <div class="chat-body">
+                                                            <div class="chat-message">
+                                                                <h5>@message.Account.FirstName @message.Account.LastName</h5>
+                                                                <p>@message.Message.Mess</p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                }
+                                                else
+                                                {
+                                                    <li class="in">
+                                                        <div class="chat-img">
+                                                            <img src="@Url.Content($"/imageUser/{message.Account.Image}")" alt="avatar" />
+                                                        </div>
+                                                        <div class="chat-body">
+                                                            <div class="chat-message">
+                                                                <h5>@message.Account.FirstName @message.Account.LastName</h5>
+                                                                <p>@message.Message.Mess</p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                }
+                                            }
+                                        </ul>
+                                        <hr />
+                                        
+                                    </div>
+                                    <div class="flex justify-end">
+                                        <input class="bg-[#D9D9D9] px-3 py-2 w-full rounded-lg"
+                                               placeholder="Aa"
+                                               type="text"
+                                               id="messageInput" />
+                                        <button id="sendButton" type="button" class="absolute w-[40px] h-[40px] flex items-center justify-center rounded-lg ">
+                                            Enter
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w-[30%] sm:hidden">
+                                <div class="text-[50px] mb-10 font-bold">Update</div>
+                                <div class="w-full flex justify-center items-center space-x-3">
+                                    <form class="bg-[#F0D1C4] px-7 py-2 text-xl mb-10 rounded-2xl " asp-action="ViewFile" asp-controller="Articles" method="post">
+                                        <input type="hidden" name="fileName" value="@idArticle" />
+                                        <button type="submit" class="text-[#E65F2B]">View</button>
+                                    </form>
+                                    <a class="bg-[#CBDAC4] px-7 py-2 text-xl mb-10 rounded-2xl text-[#1A932E]" asp-controller="Articles" asp-action="Edit" asp-route-id="@ViewBag.Article.Article.Id">
+                                        Edit
+                                    </a>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+
+                        <div>
+                            @{
+                                string stateText;
+                                string colorCode;
+                                string bgCode;
+                                switch (ViewBag.Article.Article.State)
+                                {
+                                    case 0:
+                                        stateText = "Pending";
+                                        colorCode = "#E65F2B";
+                                        bgCode = "#F0D1C4";// You can change this to any color you want
+                                        break;
+                                    case 1:
+                                        stateText = "Accepted";
+                                        colorCode = "#1A932E";
+                                        bgCode = "#CBDAC4";// You can change this to any color you want
+                                        break;
+                                    case 2:
+                                        stateText = "Rejected";
+                                        colorCode = "#EE201C";
+                                        bgCode = "#F1C6C1";// You can change this to any color you want
+                                        break;
+                                    default:
+                                        stateText = "Unknown";
+                                        colorCode = "black";
+                                        bgCode = "#";// You can change this to any color you want
+                                        break;
+                                }
+                            }
+                            <div class="w-full h-[100px] flex bg-[@bgCode] items-center justify-center">
+                                <span style="color: @colorCode;" class="text-[50px] font-bold">@stateText</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+
+@if ( User.IsInRole("Coordinator") || User.IsInRole("Administrator") )
+{
+    <div class="flex justify-center">
+        <div class="w-[80%] text-center py-10 lg:w-[100%]">
+            <div class="flex w-full">
+                <div class="w-full text-black space-y-5">
+                    <div class="bg-[#F2EAE5] rounded-l-xl w-full h-[650px] space-y-4 2xl: lg: sm:rounded-t-lg sm:h-[680px]">
+                        <div class="hidden sm:block">
+                            <div class="text-[50px] mb-10 font-bold">Mark</div>
+                            <div class="flex items-center justify-center space-x-3">
+
+                                <form class="bg-[#F0D1C4] px-7 py-2 text-xl mb-10 rounded-2xl " asp-action="ViewFile" asp-controller="Articles" method="post">
+                                    <input type="hidden" name="fileName" value="@idArticle" />
+                                    <button type="submit" class="text-[#E65F2B]">View</button>
+                                </form>
+                                <form asp-action="AcceptArt" asp-route-id="@ViewBag.Article.Article.Id" method="post">
+                                    <button class="bg-[#CBDAC4] text-[#1A932E] px-7 py-2 text-xl mb-10 rounded-2xl" type="submit">Accept</button>
+                                </form>
+                                <form asp-action="RejectArt" asp-route-id="@ViewBag.Article.Article.Id" method="post">
+                                    <button class="bg-[#F1C6C1] text-[#EE201C] px-7 py-2 text-xl mb-10 rounded-2xl" type="submit">Reject</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="w-full h-[650px] flex 2xl: lg: sm:flex-col sm:h-[700px]">
+                            <div class="w-[70%] h-[650px] text-left bg-[#474341] rounded-l-xl px-6 py-8 sm:rounded-lg sm:w-[100%] sm:h-[680px]">
+                                <div class="bg-[#F2EAE5] w-full h-full rounded-xl px-5 py-5 space-y-4">
+                                    <div class="w-full ">
+                                        <ul id="messagesList" class="chat-list h-[500px] overflow-y-scroll whitespace-nowrap scroll-smooth">
+                                            @foreach (var message in ViewBag.Messages)
+                                            {
+                                                @if (message.Account.Id == ViewBag.User)
+                                                {
+                                                    <li class="out">
+                                                        <div class="chat-img">
+                                                            <img src="@Url.Content($"/imageUser/{message.Account.Image}")" alt="avatar" />
+                                                        </div>
+                                                        <div class="chat-body">
+                                                            <div class="chat-message">
+                                                                <h5>@message.Account.FirstName @message.Account.LastName</h5>
+                                                                <p>@message.Message.Mess</p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                }
+                                                else
+                                                {
+                                                    <li class="in">
+                                                        <div class="chat-img">
+                                                            <img src="@Url.Content($"/imageUser/{message.Account.Image}")" alt="avatar" />
+                                                        </div>
+                                                        <div class="chat-body">
+                                                            <div class="chat-message">
+                                                                <h5>@message.Account.FirstName @message.Account.LastName</h5>
+                                                                <p>@message.Message.Mess</p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                }
+                                            }
+                                        </ul>
+                                        <hr />
+
+                                    </div>
+                                    <div class="flex justify-end">
+                                        <input class="bg-[#D9D9D9] px-3 py-2 w-full rounded-lg"
+                                               placeholder="Aa"
+                                               type="text"
+                                               id="messageInput" />
+                                        <button id="sendButton" type="button" class="absolute w-[40px] h-[40px] flex items-center justify-center rounded-lg ">
+                                            Enter
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w-[30%] sm:hidden">
+                                <div class="text-[50px] mb-10 font-bold">Update</div>
+                                <div class="flex flex-col items-center justify-center space-x-3 ">
+                                    <form class="bg-[#F0D1C4] px-7 py-2 text-xl mb-10 rounded-2xl " asp-action="ViewFile" asp-controller="Articles" method="post">
+                                        <input type="hidden" name="fileName" value="@idArticle" />
+                                        <button type="submit" class="text-[#E65F2B]">View</button>
+                                    </form>
+                                    <form asp-action="AcceptArt" asp-route-id="@ViewBag.Article.Article.Id" method="post">
+                                        <button class="bg-[#CBDAC4] text-[#1A932E] px-7 py-2 text-xl mb-10 rounded-2xl" type="submit">Accept</button>
+                                    </form>
+                                    <form asp-action="RejectArt" asp-route-id="@ViewBag.Article.Article.Id" method="post">
+                                        <button class="bg-[#F1C6C1] text-[#EE201C] px-7 py-2 text-xl mb-10 rounded-2xl" type="submit">Reject</button>
+                                    </form>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+
+                       
+                                @{
+                                    string stateText;
+                                    string colorCode;
+                                    string bgCode;
+                                    switch (ViewBag.Article.Article.State)
+                                    {
+                                        case 0:
+                                            stateText = "Pending";
+                                            colorCode = "#E65F2B";
+                                    bgCode = "#F0D1C4";// You can change this to any color you want
+                                            break;
+                                        case 1:
+                                            stateText = "Accepted";
+                                            colorCode = "#1A932E";
+                                            bgCode = "#CBDAC4";// You can change this to any color you want
+                                            break;
+                                        case 2:
+                                            stateText = "Rejected";
+                                            colorCode = "#EE201C";
+                                            bgCode = "#F1C6C1";// You can change this to any color you want
+                                            break;
+                                        default:
+                                            stateText = "Unknown";
+                                            colorCode = "black";
+                                            bgCode = "#";// You can change this to any color you want
+                                            break;
+                                    }
+                                }
+                                <div class="w-full h-[100px] flex bg-[@bgCode] items-center justify-center">
+                                <span style="color: @colorCode;" class="text-[50px] font-bold" >@stateText</span>
+                                </div>
+                           
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<script>
+    var currentUser = '@(currentUser)';
+    var articleId = '@(articleId)';
+</script>
+<script src="~/js/chat.js"></script>
+
+<style>
+    .chat-list {
+        padding: 0;
+        font-size: .8rem;
+    }
+
+        .chat-list li {
+            margin-bottom: 10px;
+            overflow: auto;
+            color: #ffffff;
+        }
+
+        .chat-list .chat-img {
+            float: left;
+            width: 48px;
+        }
+
+            .chat-list .chat-img img {
+                -webkit-border-radius: 50px;
+                -moz-border-radius: 50px;
+                border-radius: 50px;
+                width: 100%;
+            }
+
+        .chat-list .chat-message {
+            -webkit-border-radius: 50px;
+            -moz-border-radius: 50px;
+            border-radius: 50px;
+            background: #5a99ee;
+            display: inline-block;
+            padding: 10px 20px;
+            position: relative;
+        }
+
+            .chat-list .chat-message:before {
+                content: "";
+                position: absolute;
+                top: 15px;
+                width: 0;
+                height: 0;
+            }
+
+            .chat-list .chat-message h5 {
+                margin: 0 0 5px 0;
+                font-weight: 600;
+                line-height: 100%;
+                font-size: .9rem;
+            }
+
+            .chat-list .chat-message p {
+                line-height: 18px;
+                margin: 0;
+                padding: 0;
+            }
+
+        .chat-list .chat-body {
+            margin-left: 20px;
+            float: left;
+            width: 70%;
+        }
+
+        .chat-list .in .chat-message:before {
+            left: -12px;
+            border-bottom: 20px solid transparent;
+            border-right: 20px solid #5a99ee;
+        }
+
+        .chat-list .out .chat-img {
+            float: right;
+        }
+
+        .chat-list .out .chat-body {
+            float: right;
+            margin-right: 20px;
+            text-align: right;
+        }
+
+        .chat-list .out .chat-message {
+            background: #fc6d4c;
+        }
+
+            .chat-list .out .chat-message:before {
+                right: -12px;
+                border-bottom: 20px solid transparent;
+                border-left: 20px solid #fc6d4c;
+            }
+
+    .card .card-header:first-child {
+        -webkit-border-radius: 0.3rem 0.3rem 0 0;
+        -moz-border-radius: 0.3rem 0.3rem 0 0;
+        border-radius: 0.3rem 0.3rem 0 0;
+    }
+
+    .card .card-header {
+        background: #17202b;
+        border: 0;
+        font-size: 1rem;
+        padding: .65rem 1rem;
+        position: relative;
+        font-weight: 600;
+        color: #ffffff;
+    }
+
+    .content {
+        margin-top: 40px;
+    }
+</style>

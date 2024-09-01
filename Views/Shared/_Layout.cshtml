@@ -1,0 +1,304 @@
+﻿﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> *@
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/notification.js"></script>
+    <link rel="stylesheet" href="~/css/output.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/SchoolProject1640.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+    <script src="https://kit.fontawesome.com/1c6258baf1.js" crossorigin="anonymous"></script>
+</head>
+<body class="bg-[#EBDFD7]">
+    <script>
+        function toggleMenu() {
+            var ulElement1 = document.getElementById('menu1');
+            ulElement1.classList.toggle('hidden');
+            var ulElement2 = document.getElementById('menu2');
+            ulElement2.classList.toggle('hidden');
+            var ulElement3 = document.getElementById('a');
+            ulElement3.classList.toggle('py-3');
+            console.log("Menu toggled");
+
+        }
+
+    </script>
+
+    @if (SignInManager.IsSignedIn(User))
+    {
+        @* <header>
+    <nav class="w-full flex justify-between h-[90px]  sm:h-[70px] lg:h-[80px]">
+    <div class="flex w-full justify-between bg-black items-center text-white">
+    <div>
+    <a class="text-[#FD7401] font-bold text-4xl ml-5" asp-area="" asp-controller="Home" asp-action="Index">Greenwich</a>
+    <button class="" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+    aria-expanded="false" aria-label="Toggle navigation">
+    <span class=""></span>
+    </button>
+    </div>
+
+    <div class="text-white">
+
+    <ul class="flex space-x-10 text-2xl font-bold lg:text-xl lg:px-10 xl:hidden 2xl:space-x-5 ">
+
+    <ul class="flex space-x-10 text-2xl font-bold lg:text-xl lg:px-10 sm:hidden  ">
+
+    @if (User.IsInRole("Guest"))
+    {
+    <li class="hover:text-[#FD7401]">
+    <a class="" asp-area="" asp-controller="Home" asp-action="Index">All Articles</a>
+    </li>
+    }
+    else if (User.IsInRole("Student"))
+    {
+    <li class="hover:text-[#FD7401]">
+    <a class="" asp-area="" asp-controller="Home" asp-action="Index">All Articles</a>
+    </li>
+    <li class="hover:text-[#FD7401]">
+    <a class="" asp-area="" asp-controller="Contributions" asp-action="IndexUser">Your Articles</a>
+    </li>
+    }
+    else if (User.IsInRole("Manager"))
+    {
+    <li class="hover:text-[#FD7401]">
+    <a class="" asp-area="" asp-controller="Home" asp-action="Index">Selected Articles</a>
+    </li>
+    <li class="hover:text-[#FD7401]">
+    <a class="" asp-area="" asp-controller="Contributions" asp-action="IndexUser">All Articles</a>
+    </li>
+    <li class="hover:text-[#FD7401]">
+    <a class="" asp-area="" asp-controller="Admins" asp-action="IndexManager">Accounts</a>
+    </li>
+    }
+    else if (User.IsInRole("Coordinator"))
+    {
+    <li class="hover:text-[#FD7401]">
+    <a class="" asp-area="" asp-controller="Home" asp-action="Index">All Articles</a>
+    </li>
+    <li class="hover:text-[#FD7401]">
+    <a class="" asp-area="" asp-controller="Contributions" asp-action="IndexUser">Mark</a>
+    </li>
+    <li class="hover:text-[#FD7401]">
+    <a class="" asp-area="" asp-controller="Admins" asp-action="IndexCoor">Accounts</a>
+    </li>
+    }
+    else if (User.IsInRole("Administrator"))
+    {
+    <li class="hover:text-[#FD7401]">
+    <a class="2xl:text-xl" asp-area="" asp-controller="Admins" asp-action="DashBoardAdmin">Dashboard</a>
+    </li>
+    <li class="hover:text-[#FD7401]">
+    <a class="2xl:text-xl" asp-area="" asp-controller="Home" asp-action="Index">Selected Articles</a>
+    </li>
+    <li class="hover:text-[#FD7401]">
+    <a class="2xl:text-xl" asp-area="" asp-controller="Contributions" asp-action="Index">Contributions</a>
+    </li>
+    <li class="hover:text-[#FD7401]">
+    <a class="2xl:text-xl" asp-area="" asp-controller="Contributions" asp-action="IndexUser">All Articles</a>
+    </li>
+    <li class="hover:text-[#FD7401]">
+    <a class="2xl:text-xl" asp-area="" asp-controller="Admins" asp-action="Index">Accounts</a>
+    </li>
+    <li class="hover:text-[#FD7401]">
+    <a class="2xl:text-xl" asp-area="" asp-controller="TermAndCons" asp-action="Index">Terms</a>
+    </li>
+    }
+    </ul>
+    </div>
+    <partial name="_LoginPartial" />
+    </div>
+    </nav>
+    </header> *@
+
+        <header class="">
+            <nav class="w-full flex justify-between h-full " id="menu1">
+                <div class="flex w-full justify-between bg-black items-center text-white">
+                    <div class="flex justify-between items-center xl:w-full h-[90px] ">
+                        <a class="text-[#FD7401] font-bold text-4xl ml-5" asp-area="" asp-controller="Home" asp-action="Index">Greenwich</a>
+                        <button class="hidden xl:block text-gray-800  focus:outline-none" onclick="toggleMenu()">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-[#FD7401] mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="text-white">
+                        <ul class="flex space-x-10 text-2xl font-bold lg:text-xl lg:px-10 xl:hidden 2xl:space-x-5 ">
+                            @if (User.IsInRole("Guest"))
+                            {
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="Home" asp-action="Index">All Articles</a>
+                                </li>
+                            }
+                            else if (User.IsInRole("Student"))
+                            {
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="Users" asp-action="DashBoardStudent">Dashboard</a>
+                                </li>
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="Home" asp-action="Index">All Articles</a>
+                                </li>
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="Contributions" asp-action="IndexUser">Your Articles</a>
+                                </li>
+                            }
+                            else if (User.IsInRole("Manager"))
+                            {
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="Home" asp-action="Index">Selected Articles</a>
+                                </li>
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="Contributions" asp-action="IndexUser">All Articles</a>
+                                </li>
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="Admins" asp-action="IndexManager">Accounts</a>
+                                </li>
+                            }
+                            else if (User.IsInRole("Coordinator"))
+                            {
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="Home" asp-action="Index">All Articles</a>
+                                </li>
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="Contributions" asp-action="IndexUser">Mark</a>
+                                </li>
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="Admins" asp-action="IndexCoor">Accounts</a>
+                                </li>
+                            }
+                            else if (User.IsInRole("Administrator"))
+                            {
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="2xl:text-xl" asp-area="" asp-controller="Admins" asp-action="DashBoardAdmin">Dashboard</a>
+                                </li>
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="2xl:text-xl" asp-area="" asp-controller="Home" asp-action="Index">Selected Articles</a>
+                                </li>
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="2xl:text-xl" asp-area="" asp-controller="Contributions" asp-action="Index">Contributions</a>
+                                </li>
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="2xl:text-xl" asp-area="" asp-controller="Contributions" asp-action="IndexUser">All Articles</a>
+                                </li>
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="2xl:text-xl" asp-area="" asp-controller="Admins" asp-action="Index">Accounts</a>
+                                </li>
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="2xl:text-xl" asp-area="" asp-controller="TermAndCons" asp-action="Index">Terms</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <partial name="_LoginPartial" />
+                </div>
+            </nav>
+
+            <nav class="hidden h-full" id="menu2">
+                <div class="flex flex-col w-full bg-black ">
+                    <div class="flex w-full justify-between bg-black items-center text-white h-[100px] " id="a">
+                        <div class="flex justify-between xl:w-full">
+                            <a class="text-[#FD7401] font-bold text-4xl ml-5" asp-area="" asp-controller="Home" asp-action="Index">Greenwich</a>
+                            <button class="hidden xl:block text-gray-800  focus:outline-none" onclick="toggleMenu()">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-[#FD7401] mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <partial name="_LoginPartial" />
+                    </div>
+
+                    <div class="text-white bg-black w-full  flex justify-center">
+                        <ul class="flex space-x-10 text-2xl font-bold lg:text-xl lg:px-10 lg:space-x-3 overflow-ellipsis whitespace-normal  ">
+                            @if (User.IsInRole("Guest"))
+                            {
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="Home" asp-action="Index">All Articles</a>
+                                </li>
+                            }
+                            else if (User.IsInRole("Student"))
+                            {
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="Users" asp-action="DashBoardStudent">Dashboard</a>
+                                </li>
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="Home" asp-action="Index">All Articles</a>
+                                </li>
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="Contributions" asp-action="IndexUser">Your Articles</a>
+                                </li>
+                            }
+                            else if (User.IsInRole("Manager"))
+                            {
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="Home" asp-action="Index">Selected Articles</a>
+                                </li>
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="Contributions" asp-action="IndexUser">All Articles</a>
+                                </li>
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="Admins" asp-action="IndexManager">Accounts</a>
+                                </li>
+                            }
+                            else if (User.IsInRole("Coordinator"))
+                            {
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="Home" asp-action="Index">All Articles</a>
+                                </li>
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="Contributions" asp-action="IndexUser">Mark</a>
+                                </li>
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="Admins" asp-action="IndexCoor">Accounts</a>
+                                </li>
+                            }
+                            else if (User.IsInRole("Administrator"))
+                            {
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="Admins" asp-action="DashBoardAdmin">Dashboard</a>
+                                </li>
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="Home" asp-action="Index">Selected Articles</a>
+                                </li>
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="Contributions" asp-action="Index">Contributions</a>
+                                </li>
+
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="Contributions" asp-action="IndexUser">All Articles</a>
+                                </li>
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="Admins" asp-action="Index">Accounts</a>
+                                </li>
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="TermAndCons" asp-action="Index">Terms</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+        </header>
+
+    }
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

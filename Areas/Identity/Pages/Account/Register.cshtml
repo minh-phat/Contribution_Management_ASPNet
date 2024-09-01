@@ -1,0 +1,243 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<style>
+    .avatar-container {
+        display: flex;
+        justify-content: center; /* Center horizontally */
+        align-items: center; /* Center vertically */
+        height: 200px; /* Adjust height as needed */
+    }
+
+    .avatar-label {
+        display: block;
+        position: relative;
+        width: 150px; /* Adjust width of the avatar */
+        height: 150px; /* Adjust height of the avatar */
+        overflow: hidden;
+        border-radius: 50%; /* Ensures the avatar is circular */
+    }
+
+        .avatar-label img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        border: 0;
+    }
+
+</style>
+
+<script>
+    // Prevent choosing faculty when creating Administrator and Manager
+    $(document).ready(function () {
+        $("#role").change(function () {
+            var selectedRole = $(this).val();
+            if (selectedRole === "3") {
+                $('#facultyDiv').hide();
+                $('#faculty').val("8");
+            } else if (selectedRole === "4") {
+                $('#facultyDiv').hide();
+                $('#faculty').val("7");
+            } else {
+                $('#facultyDiv').show();
+            }
+        });
+    })
+
+    // Preview avatar when selected
+    function loadAvatar(event) {
+        var reader = new FileReader();
+        reader.onload = function () {
+            $('#avatar-preview').attr('src', reader.result);
+        };
+        reader.readAsDataURL(event.target.files[0]);
+        // Show the avatar preview after selecting an image
+        $('#avatar-preview').show();
+    }
+</script>
+
+
+
+<div class="row">
+    <div class="px-16 py-8 w-full h-[900px] flex text-black 2xl:px-5 lg:px-5 sm:px-1">
+        <div class="w-full h-full bg-[#EBDFD7] py-5 px-3 sm:w-[100%] sm:px-1">
+            <div class="w-full h-[90%]">
+                <div class="w-full flex items-center justify-center py-10 ">
+                    <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" enctype="multipart/form-data" class="flex flex-col items-center justify-center space-y-7 bg-[#F2EAE5] p-10 rounded-2xl">
+                        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                        @* IMAGE *@
+                        <div class="">
+                            <input type="file" name="files" asp-for="Input.Image1" id="avatar-input" onchange="loadAvatar(event)" class="form-control visually-hidden" aria-required="true" />
+                            <label for="avatar-input" class="avatar-label" asp-for="Input.Image1">
+                                <img id="avatar-preview" src="/imageUser/ImageDefaultUser.png" alt="Avatar">
+                            </label>
+                            <span asp-validation-for="Input.Image1" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating mb-3"></div>
+
+                        @* FIRST NAME *@
+                        <div class="text-[16px] space-y-1 sm:text-[14px]">
+                            <div class="text-[#828181]">
+                                <label asp-for="Input.FirstName" class="">First Name</label>
+                            </div>
+                            <div class="flex items-center justify-end">
+                                <input asp-for="Input.FirstName" autocomplete="given-name" aria-required="true" placeholder="John" class="h-[40px] w-[380px] bg-[#F1F3F6] px-5 rounded-lg sm:w-[280px] text-black"
+                                       placeholder="Enter email ..." />
+                                <div class="absolute w-[40px] h-[40px] bg-[#FD7401] flex items-center justify-center rounded-lg">
+                                    <i class="fa fa-user" aria-hidden="true"></i>
+
+                                </div>
+                            </div>
+                            <span asp-validation-for="Input.LastName" class="text-danger"></span>
+
+                        </div>
+
+                        @* LAST NAME *@
+                        <div class="text-[16px] space-y-1 sm:text-[14px]">
+                            <div class="text-[#828181]">
+                                <label asp-for="Input.LastName">Last Name</label>
+                            </div>
+                            <div class="flex items-center justify-end">
+                                <input asp-for="Input.LastName" autocomplete="family-name" aria-required="true" placeholder="Doe" class="h-[40px] w-[380px] bg-[#F1F3F6] px-5 rounded-lg sm:w-[280px] text-black" />
+                                <div class="absolute w-[40px] h-[40px] bg-[#FD7401] flex items-center justify-center rounded-lg">
+                                    <i class="fa fa-user" aria-hidden="true"></i>
+
+                                </div>
+                            </div>
+                            <span asp-validation-for="Input.LastName" class="text-danger"></span>
+
+                        </div>
+
+                        @* EMAIL *@
+                        <div class="text-[16px] space-y-1 sm:text-[14px]">
+                            <div class="text-[#828181]">
+                                <label asp-for="Input.Email" class="label">Email</label>
+                            </div>
+                            <div class="flex items-center justify-end">
+                                <input class="h-[40px] w-[380px] bg-[#F1F3F6] px-5 rounded-lg sm:w-[280px] text-black" asp-for="Input.Email" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                                <div class="absolute w-[40px] h-[40px] bg-[#FD7401] flex items-center justify-center rounded-lg">
+                                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                            <span asp-validation-for="Input.Email" class="text-danger"></span>
+
+                        </div>
+
+                        @*
+                        <div class="text-[16px] space-y-1 sm:text-[14px]">
+                            <div class="text-[#828181]">
+                                <label asp-for="Input.Password" class="label">Password</label>
+                            </div>
+                            <div class="flex items-center justify-end">
+                                <input class="h-[40px] w-[380px] bg-[#F1F3F6] px-5 rounded-lg sm:w-[280px] text-black" asp-for="Input.Password" autocomplete="new-password" aria-required="true" placeholder="password" id="passwordInput" />
+                                <div class="absolute w-[40px] h-[40px] bg-[#FD7401] flex items-center justify-center rounded-lg">
+                                    <i class="fa fa-unlock-alt" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                            <span asp-validation-for="Input.Password" class="text-danger"></span>
+
+                            <span id="passwordError" class="text-danger" style="display: none;">Password must contain at least one special character (!@@#$%^&amp;*), at least one capital letter, be at least 6 characters long, and have a maximum length of 100 characters.</span>
+                        </div>
+
+                        @* CONFIRM PASSWORD
+                        <div class="text-[16px] space-y-1 sm:text-[14px]">
+                            <div class="text-[#828181]">
+                                <label asp-for="Input.ConfirmPassword" class="label">Confirm Password</label>
+                            </div>
+                            <div class="flex items-center justify-end">
+                                <input class="h-[40px] w-[380px] bg-[#F1F3F6] px-5 rounded-lg sm:w-[280px] text-black" asp-for="Input.ConfirmPassword" autocomplete="new-password" aria-required="true" placeholder="password" />
+                                <div class="absolute w-[40px] h-[40px] bg-[#FD7401] flex items-center justify-center rounded-lg">
+                                    <i class="fa fa-unlock-alt" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                            <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+
+                        </div>
+
+                        @* ROLE *@
+                        <div class="text-[16px] space-y-1 sm:text-[14px]">
+                            <div class="text-[#828181]">
+                                <label asp-for="Input.Role" class="label">Role</label>
+                            </div>
+                            <div class="flex items-center justify-end">
+                                <select id="role" asp-for="Input.Role" class="h-[40px] w-[380px] bg-[#F1F3F6] px-5 rounded-lg sm:w-[280px] text-black"
+                                        v-model="form.roleId">
+                                    <option value="">Select a role</option>
+                                    @foreach (var Role in Model.Roles)
+                                    {
+ @*                                        @if (Role.Name != "Administrator")
+                                        {
+                                            <option value="@Role.Id">@Role.Name</option>
+                                        } *@
+                                        <option value="@Role.Id">@Role.Name</option>
+                                    }
+                                </select>
+                                <div class="absolute w-[40px] h-[40px] bg-[#FD7401] flex items-center justify-center rounded-lg">
+                                    <i class="fa fa-users" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                            <span asp-validation-for="Input.Role" class="text-danger"></span>
+                        </div>
+
+
+                        @* FACULTY *@
+                        <div id="facultyDiv" class="text-[16px] space-y-1 sm:text-[14px]">
+                            <div class="text-[#828181]">
+                                <label asp-for="Input.Faculty" class="label">Faculty</label>
+                            </div>
+                            <div class="flex items-center justify-end">
+                                <select id="faculty" asp-for="Input.Faculty" class="h-[40px] w-[380px] bg-[#F1F3F6] px-5 rounded-lg sm:w-[280px] text-black"
+                                        v-model="form.facultyId">
+                                    <option value="">Select a faculty</option>
+                                    @foreach (var faculty in Model.Faculties)
+                                    {
+                                        if (faculty.Name != "Admin" && faculty.Name != "Manager")
+                                        {
+                                            <option value="@faculty.Id">@faculty.Name</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@faculty.Id" style="display: none;">@faculty.Name</option>
+                                        }
+                                    }
+                                </select>
+                                <div class="absolute w-[40px] h-[40px] bg-[#FD7401] flex items-center justify-center rounded-lg">
+                                    <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                            <span asp-validation-for="Input.Faculty" class="text-danger"></span>
+                        </div>
+
+
+
+
+                        <button id="registerSubmit" type="submit" class="space-x-2 pt-3" type="submit">
+                            <div class="w-[380px] text-[#FD7401] border-2 border-[#FD7401] text-[20px] font-bold rounded-[10px] h-[45px] flex items-center justify-center sm:w-[280px]">
+                                Create User
+                            </div>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

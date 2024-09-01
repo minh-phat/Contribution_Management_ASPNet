@@ -1,0 +1,48 @@
+﻿@model IEnumerable<SchoolProject1640.Models.TermAndCon>
+
+@{
+    ViewData["Title"] = "Index";
+    var checkCreate = ViewBag.CheckCreate;
+}
+
+
+
+
+
+<div class="p-10 text-black sm:px-0 h-screen">
+    <div class="px-5 sm:px-0 w-full h-full">
+        <div class="w-full h-[300px] flex flex-col bg-[#F2EAE5] mb-10 px-5 rounded-xl py-3">
+            <div class="w-full text-center font-bold text-[50px]">Terms And Condition</div>
+            <div class="w-full text-right border-red-600">
+                @if (checkCreate < 1)
+                {
+                    <a asp-action="Create" id="downloadButton" class="bg-[#FD7401] text-black font-bold py-2 px-4 rounded">Create New</a>
+                }
+            </div>
+            <div class="mt-5 h-[600px] ">
+                <table class="w-full">
+                    <thead>
+                        <tr class="w-full">
+                            <th class="w-[50%] text-left text-xl"> Terms And Condition </th>
+                            <th class="w-[20%] text-left text-xl"> Date Update </th>
+                            <th class="w-[10%] text-left text-xl"> Active </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="py-2 overflow-ellipsis whitespace-normal"> @Html.DisplayFor(modelItem => item.TermsAndCondition) </td>
+                                <td>  @Html.DisplayFor(modelItem => item.CreatedAt)</td>
+                                <td> <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-pencil-square-o text-[#E65F2B]" aria-hidden="true"></i></a>   </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+</div>

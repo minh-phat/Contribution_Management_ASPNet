@@ -1,0 +1,82 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    string firstName = User.Identity?.Name?.Split(' ')?.FirstOrDefault();
+}
+<ul class=" text-amber-600 flex items-center space-x-2 pr-5">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        var currentUser = await UserManager.GetUserAsync(User);
+
+        <li class="px-4 xl:hidden">
+            <a class="nav-link btn btn-link text-dark" asp-controller="Notifications" asp-action="Index">
+                <i class="fa-regular fa-bell fa-2xl" style="color: #d47711;"></i>
+            </a>
+        </li>
+
+        <li class="">
+
+            <a class="flex bg-white px-5 py-2 rounded-3xl space-x-3 w-[200px] " asp-action="Index" asp-controller="Users" title="Manage">
+                @if (@currentUser != null)
+                {
+                    <img width="50px" height="50px" class="rounded-full" src="/imageUser/@currentUser.Image" />
+                }
+                else
+                {
+                    <img width="50px" height="50px" class="rounded-2xl" src="/imageUser/ImageDefaultUser.png" />
+                }
+
+                <div class="flex flex-col items-center justify-center">
+                    @if (@currentUser != null)
+                    {
+                        <div class="te"> @currentUser.FirstName</div>
+                    }
+
+                    <div class="text-[12px]">
+                        @if (User.IsInRole("Guest"))
+                        {
+                            <div>Guest</div>
+                        }
+                        @if (User.IsInRole("Student"))
+                        {
+                            <div>Student</div>
+                        }
+                        @if (User.IsInRole("Manager"))
+                        {
+                            <div>Manager</div>
+                        }
+                        @if (User.IsInRole("Coordinator"))
+                        {
+                            <div>Coordinator</div>
+                        }
+                        @if (User.IsInRole("Administrator"))
+                        {
+                            <div>Administrator</div>
+                        }
+                    </div>
+                </div>
+            </a>
+            <!-- <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a> -->
+        </li>
+
+        <li class="px-4 sm:px-0">
+            <form class="" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                <button type="submit" class="nav-link btn btn-link text-dark">
+                    <i class="fa fa-sign-out fa-2xl" aria-hidden="true"></i>
+                </button>
+            </form>
+        </li>
+
+
+    }
+    else
+    {
+        <li class="">
+            <a class="" asp-area="Identity" asp-page="/Account/Register">Register</a>
+        </li>
+        <li class="">
+            <a class="" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        </li>
+    }
+</ul>

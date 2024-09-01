@@ -1,0 +1,111 @@
+﻿@model SchoolProject1640.Models.Article
+
+@{
+    ViewData["Title"] = "Edit";
+    var timeEnd = ((DateTime)ViewBag.MessErroClose).Date.ToString("MMMM dd, yyyy");
+    var timeNow = ((DateTime)ViewBag.DatetimeNow).Date.ToString("MMMM dd, yyyy");
+
+}
+<div class="flex justify-center">
+    <div class="w-[70%] text-center py-10 lg:w-[100%] ">
+        <div class="flex w-full">
+            <div class="w-full text-black space-y-5">
+                <div class="bg-[#F2EAE5] rounded-l-xl w-full h-[650px] space-y-4 2xl: lg: sm:rounded-t-lg sm:h-[680px]">
+                    <div class="w-full h-[650px] flex 2xl: lg: sm:flex-col sm:h-[700px]">
+                        <div class="w-[25%] h-[650px] text-left bg-[#474341] rounded-l-xl flex items-center justify-center 2xl: lg: sm:w-full sm:rounded-lg sm:h-[200px]">
+                            <div class="-rotate-90 text-white font-bold text-[60px] 2xl: lg: sm:rotate-0 sm:text-[50px]">
+                                <div class="w-[500px] text-center">Edit Articles</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center w-[75%] h-[650px] text-left py-10 2xl: lg: sm:py-3 sm:w-full">
+                            
+                            <form id="editForm" asp-action="Edit" method="post" enctype="multipart/form-data"
+                                  class="w-full flex flex-col items-center space-y-4">
+                                <div class="font-bold text-2xl">@timeEnd</div>
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input type="hidden" asp-for="Id" />
+
+                                <div class="text-[16px] space-y-1 sm:text-[14px]">
+                                    <label asp-for="Title" class="text-black font-medium text-[18px]">Title</label>
+                                    <div class="flex items-center justify-end">
+                                        <input asp-for="Title" class="h-[45px] w-[600px] bg-[#B0B0B0] px-5 rounded-lg text-black placeholder-black 2xl:w-[400px] lg:w-[400px] sm:w-[350px]"
+                                               type="text" />
+                                    </div>
+                                    <span asp-validation-for="Title" class="text-danger"></span>
+                                </div>
+                                <div class="text-[16px] space-y-1 sm:text-[14px]">
+                                    <label for="imageFile" class="text-black font-medium text-[18px]">Image</label>
+
+                                    <div class="flex items-center justify-end">
+                                        <input id="imageInput" type="file" name="imageFile" accept="image/*" class="bg-[#B0B0B0] w-[600px] rounded-lg border border-solid border-neutral-300 bg-clip-padding px-3 py-[0.32rem] text-base font-normal text-neutral-700 transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-[0.50rem] file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-[#FD7401] focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:file:bg-neutral-700 dark:file:text-neutral-100 dark:focus:border-primary 2xl:w-[400px] lg:w-[400px] sm:w-[350px]" />
+                                        <div class="absolute w-[40px] h-[40px] flex items-center justify-center rounded-lg">
+                                            <Icon class="w-7 h-7" name="bxs-image" />
+                                        </div>
+                                        <div>
+                                            <input id="idContri" name="idContri" hidden />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-[16px] space-y-1 sm:text-[14px]">
+                                    <label for="formFile"
+                                           class="text-black font-medium text-[18px]">File</label>
+
+                                    <div class="flex items-center justify-end">
+                                        <input asp-for="FileName" value="default_filename.docx" id="fileInput" type="file" name="files" multiple accept=".docx" class="bg-[#B0B0B0] w-[600px] rounded-lg border border-solid border-neutral-300 bg-clip-padding px-3 py-[0.32rem] text-base font-normal text-neutral-700 transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-[0.50rem] file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-[#FD7401] focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:file:bg-neutral-700 dark:file:text-neutral-100 dark:focus:border-primary 2xl:w-[400px] lg:w-[400px] sm:w-[350px]" />
+                                        <div class="absolute w-[40px] h-[40px] flex items-center justify-center rounded-lg">
+                                            <Icon class="w-7 h-7" name="bxs:file" />
+                                        </div>
+                                        <div>
+                                            <input type="submit" value="Save" class="btn btn-primary" hidden />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="text-[16px] space-y-1 sm:text-[14px]">
+                                    <label asp-for="Description" class="text-black font-medium text-[18px]">
+                                        Discription
+                                    </label>
+                                    <div class="h-[100px]">
+                                        <textarea asp-for="Description" class=" h-[100px] w-[600px] py-2 bg-[#B0B0B0] px-5 rounded-lg text-black placeholder-black 2xl:w-[400px] lg:w-[400px] sm:w-[350px]"></textarea>
+                                    </div>
+                                    <span asp-validation-for="Description" class="text-danger"></span>
+                                </div>
+
+                                <div class="py-3">
+                                    <div class="text-[16px] space-y-1 sm:text-[14px]">
+                                        <div class="h-[100px]">
+                                            <button type="submit" value="Create" class="h-[45px] w-[200px] bg-[#FD7401] px-5 rounded-lg text-black placeholder-black font-medium text-[15px] space-x-2 flex items-center justify-center 2xl:">
+                                                <div class="text-white font-bold text-[20px]">
+                                                    Submit
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+<script>
+    document.getElementById("editForm").addEventListener("submit", function (event) {
+        var timeEnd = new Date('@timeEnd');
+        var timeNow = new Date('@timeNow');
+        if (timeEnd < timeNow) {
+            event.preventDefault(); // Prevent form submission
+            alert("The time to submit the article has ended.");
+        }
+    });
+</script>

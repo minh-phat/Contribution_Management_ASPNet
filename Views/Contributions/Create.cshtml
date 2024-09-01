@@ -1,0 +1,166 @@
+﻿@model SchoolProject1640.Models.Contribution
+
+@{
+    ViewData["Title"] = "Create";
+    var listFaculty = ViewBag.ListFaculty;
+}
+
+<div class="flex justify-center">
+    <div class="w-[80%] text-center py-10 sm:w-[100%] ">
+        <div class="flex w-full">
+            <div class="w-full text-black space-y-5">
+                <div class="bg-[#F2EAE5] rounded-l-xl w-full h-[800px] space-y-4 2xl: lg: sm:rounded-t-lg sm:h-[800px]">
+                    <div class="w-full h-[800px] flex 2xl: lg: sm:flex-col sm:h-[700px]">
+                        <div class="w-[25%] h-[800px] text-left bg-[#474341] rounded-l-xl flex items-center justify-center 2xl: lg: sm:w-full sm:rounded-lg sm:h-[200px]">
+                            <div class="-rotate-90 text-white font-bold text-[60px] 2xl: lg: sm:rotate-0 sm:text-[50px]">
+                                <div class="w-[500px] text-center">Add Contribution</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center w-[75%] h-[800px] text-left py-10  sm:py-3 sm:w-full">
+
+                            <form id="createForm" asp-action="Create" method="post" enctype="multipart/form-data"
+                                  class="w-full flex flex-col items-center space-y-4">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                                <div class="text-[16px] space-y-1 sm:text-[14px]">
+                                    <label asp-for="Title" class="text-black font-medium text-[18px]">Title</label>
+                                    <div class="flex items-center justify-end">
+                                        <input asp-for="Title" class="h-[45px] w-[600px] bg-[#B0B0B0] px-5 rounded-lg text-black placeholder-black 2xl:w-[400px] lg:w-[400px] sm:w-[350px]"
+                                               type="text" />
+                                    </div>
+                                    <span asp-validation-for="Title" class="text-danger"></span>
+                                </div>
+
+                                <div class="hidden text-[16px] space-y-1 sm:text-[14px]">
+                                    <label hidden asp-for ="Faculty" class="text-black font-medium text-[18px]">
+                                        Faculty</label>
+                                    <div class="flex items-center justify-end">
+                                        <select hidden asp-for="Faculty" class="h-[45px] w-[600px] bg-[#B0B0B0] px-5 rounded-lg text-black placeholder-black 2xl:w-[400px] lg:w-[400px] sm:w-[350px]"
+                                               type="text" >
+                                            <option value="">Select Faculty</option>
+                                            @foreach (var faculty in listFaculty)
+                                            {
+                                                <option value="@faculty.Id">@faculty.Name</option>
+                                            }
+                                           </select>
+                                    </div>
+                                    <span asp-validation-for="Faculty" class="text-danger"></span>
+                                </div>
+
+                                <div class="text-[16px] space-y-1 sm:text-[14px]">
+                                    <label asp-for="AcademicYear" class="text-black font-medium text-[18px]">AcademicYear</label>
+                                    <div class="flex items-center justify-end">
+                                        <input asp-for="AcademicYear" class="h-[45px] w-[600px] bg-[#B0B0B0] px-5 rounded-lg text-black placeholder-black 2xl:w-[400px] lg:w-[400px] sm:w-[350px]"
+                                               type="text" />
+                                    </div>
+                                    <span asp-validation-for="AcademicYear" class="text-danger"></span>
+                                </div>
+
+                                <div class="text-[16px] space-y-1 sm:text-[14px]">
+                                    <label asp-for="StartDate" class="text-black font-medium text-[18px]">Start Date</label>
+                                    <div class="flex items-center justify-end">
+                                        <input asp-for="StartDate" class="h-[45px] w-[600px] bg-[#B0B0B0] px-5 rounded-lg text-black placeholder-black 2xl:w-[400px] lg:w-[400px] sm:w-[350px]"
+                                                />
+                                    </div>
+                                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                                </div>
+
+                                <div class="text-[16px] space-y-1 sm:text-[14px]">
+                                    <label asp-for="ClosureDate" class="text-black font-medium text-[18px]">Closure Date</label>
+                                    <div class="flex items-center justify-end">
+                                        <input asp-for="ClosureDate" class="h-[45px] w-[600px] bg-[#B0B0B0] px-5 rounded-lg text-black placeholder-black 2xl:w-[400px] lg:w-[400px] sm:w-[350px]" />
+                                    </div>
+                                    <span asp-validation-for="ClosureDate" class="text-danger"></span>
+                                </div>
+
+                                <div class="text-[16px] space-y-1 sm:text-[14px]">
+                                    <label asp-for="FinalClosureDate" class="text-black font-medium text-[18px]">Final Closure Date</label>
+                                    <div class="flex items-center justify-end">
+                                        <input asp-for="FinalClosureDate" class="h-[45px] w-[600px] bg-[#B0B0B0] px-5 rounded-lg text-black placeholder-black 2xl:w-[400px] lg:w-[400px] sm:w-[350px]" />
+                                    </div>
+                                    <span asp-validation-for="FinalClosureDate" class="text-danger"></span>
+                                </div>
+
+                                
+
+                                <div class="py-3">
+                                    <div class="text-[16px] space-y-1 sm:text-[14px]">
+                                        <div class="h-[100px]">
+                                            <button type="submit" value="Create" class="h-[45px] w-[200px] bg-[#FD7401] px-5 rounded-lg text-black placeholder-black font-medium text-[15px] space-x-2 flex items-center justify-center 2xl:">
+                                                <div class="text-white font-bold text-[20px]">
+                                                    Submit
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* <h1>Create</h1>
+
+<h4>Contribution</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Faculty" class="control-label"></label>
+                <select asp-for="Faculty" class="form-control">
+                    <option value="">Select Faculty</option>
+                    @foreach (var faculty in listFaculty)
+                    {
+                        <option value="@faculty.Id">@faculty.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="Faculty" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AcademicYear" class="control-label"></label>
+                <input asp-for="AcademicYear" class="form-control" />
+                <span asp-validation-for="AcademicYear" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label"></label>
+                <input asp-for="StartDate" class="form-control" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ClosureDate" class="control-label"></label>
+                <input asp-for="ClosureDate" class="form-control" />
+                <span asp-validation-for="ClosureDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FinalClosureDate" class="control-label"></label>
+                <input asp-for="FinalClosureDate" class="form-control" />
+                <span asp-validation-for="FinalClosureDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+ *@
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

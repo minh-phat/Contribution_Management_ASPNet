@@ -1,0 +1,79 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+}
+
+<div class="w-full h-full px-60 py-32  lg:px-0 ">
+    <div class="px-8">
+        <div class="w-full h-full">
+            <div class="w-full h-[650px] border bg-black rounded-[30px] sm:h-[600px]">
+                <div class="px-5 py-5 sm:px-4 sm:py-4">
+                    <div class="bg-[#EBDFD7] rounded-[30px] w-full h-[610px] sm:h-[565px] space-y-5">
+                        <div class="pt-10 w-full flex flex-col items-center">
+                            <div class="text-[#FD7401] text-[40px] font-bold sm:text-[30px]">
+                                Greenwich
+                            </div>
+                            <div class="text-[#828181] text-[13px] sm:text-[10px]">
+                                Login into your account
+                            </div>
+                        </div>
+                        <form id="account" method="post" class="w-full flex flex-col items-center space-y-7">
+                            <div class="text-[16px] space-y-1 sm:text-[14px]">
+                                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                                <label asp-for="Input.Email" class="text-[#828181]">Username</label>
+                                <div class="flex items-center justify-end">
+                                    <input asp-for="Input.Email" class="h-[40px] w-[380px] bg-[#F1F3F6] px-5 rounded-lg sm:w-[280px] text-black"
+                                           autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                                    <div class="absolute w-[40px] h-[40px] bg-[#FD7401] flex items-center justify-center rounded-lg">
+                                        <i class="fa fa-user" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <span asp-validation-for="Input.Email" class="text-danger"></span>
+
+                            </div>
+                            <div class="text-[16px] space-y-1 sm:text-[14px]">
+                                <label asp-for="Input.Password" class="text-[#828181]">Password</label>
+                                <div class="flex items-center justify-end">
+                                    <input asp-for="Input.Password" class="h-[40px] w-[380px] bg-[#F1F3F6] px-5 rounded-lg sm:w-[280px] text-black"
+                                           autocomplete="current-password" aria-required="true" placeholder="password" />
+                                    <div class="absolute w-[40px] h-[40px] bg-[#FD7401] flex items-center justify-center rounded-lg">
+                                        <i class="fa fa-lock" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                                <span asp-validation-for="Input.Password" class="text-danger"></span>
+                                <a class="float-right py-3 text-[#1E2772] text-[14px] underline" id="forgot-password" asp-page="./ForgotPassword">
+                                    Forgot password?
+                                </a>
+                            </div>
+                            <div>
+                                <button id="login-submit" type="submit" class="w-[380px] bg-[#FD7401] text-[20px] font-bold rounded-[10px] h-[45px] flex items-center justify-center sm:w-[280px]">
+                                    Login Now
+                                </button>
+                            </div>
+                        </form>
+                        @* <div class="w-full flex flex-col items-center space-y-5">
+                        <div class="w-[380px] flex justify-between items-center sm:w-[280px]">
+                        <div class="w-full h-[1px] border border-[#828181]"></div>
+                        <div class="text-[#828181] w-[20%] text-center font-semibold">
+                        OR
+                        </div>
+                        <div class="w-full h-[1px] border border-[#828181]"></div>
+                        </div>
+                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="w-[380px] text-[#FD7401] border-2 border-[#FD7401] text-[20px] font-bold rounded-[10px] h-[45px] flex items-center justify-center sm:w-[280px]">
+                        Signup now
+                        </a>
+                        </div> *@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

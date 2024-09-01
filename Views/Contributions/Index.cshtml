@@ -1,0 +1,117 @@
+﻿@{
+    ViewData["Title"] = "Contributions Management";
+}
+
+
+
+<div class="p-10 text-black sm:px-0 h-screen">
+    <div class="px-5 sm:px-0 w-full h-full">
+        <div class="w-full h-[700px] flex flex-col bg-[#F2EAE5] mb-10 px-5 rounded-xl py-3">
+            <div class="w-full text-center font-bold text-[50px]">Contributions</div>
+            <div class="flex flex-row justify-between py-3">
+                <a asp-action="Create">
+                    <button type="button" class="bg-[#FD7401] text-white font-bold text-xl py-2 px-4 rounded-2xl">Create</button>
+                </a>
+                <div class="input-group mb-3">
+                    <input type="text" class="h-[45px] w-[200px] bg-[#B0B0B0] px-5 rounded-lg text-black placeholder-black " id="searchBar" placeholder="Search by Title">
+                </div>
+            </div>
+            <div class="py-3 h-[600px] overflow-y-scroll whitespace-nowrap scroll-smooth">
+                <table class="w-full">
+                    <thead>
+                        <tr class="w-full">
+                            <th class="w-[%] text-left"> Title </th>
+                            <th class="w-[%] text-left"> Faculty </th>
+                            <th class="w-[%] text-left"> Academic Year </th>
+                            <th class="w-[%] text-left"> Start Date </th>
+                            <th class="w-[%] text-left"> Closure Date </th>
+                            <th class="w-[%] text-left"> Final Closure Date </th>
+                            <th class="w-[%] text-left"> Actions </t>
+                        </tr>
+                    </thead>
+                    <tbody id="table">
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Get all accounts data from database on page starts
+            loadData();
+
+            // Update data when search input is changed
+            $('#searchBar').on("input", function () {
+                loadData();
+            });
+
+            // Update data when search button is clicked
+            $("#searchButton").on("click", function () {
+                loadData();
+            });
+
+            // Fetch data from database
+            function loadData() {
+                var title = $('#searchBar').val();
+                $.ajax({
+                    url: '@Url.Action("SearchContribution", "Contributions")',
+                    type: 'GET',
+                    data: { title: title },
+                    success: function (data) {
+                        populateTale(data, title);
+                    },
+                    error: function () {
+                        $('#table').empty();
+                        $('#table').append('<tr><td colspan="7" class="text-center text-danger">Error searching contributions. Please try again later.</td></tr>');
+                    }
+                });
+            }
+
+            // Populate table with data from database
+            function populateTale(data, title) {
+                $('#table').empty();
+
+                if (data && data.length > 0) {
+                    $.each(data, function (index, contribution) {
+                        var updateUrl = `/Contributions/Update/${contribution.contribution.id}`;
+                        var deleteUrl = `/Contributions/Delete/${contribution.contribution.id}`;
+                        var row =
+                            `<tr>
+                                        <td class="py-3">${contribution.contribution.title}</td>
+                                        <td>${contribution.facultyName}</td>
+                                        <td>${contribution.contribution.academicYear}</td>
+                                        <td>${contribution.contribution.startDate}</td>
+                                        <td>${contribution.contribution.closureDate}</td>
+                                        <td>${contribution.contribution.finalClosureDate}</td>
+                                        <td>
+                                                <div class="flex space-x-5">
+                                            <a href="${updateUrl}" class="text-decoration-none">
+                                                        <button type="button" class="btn btn-primary py-2"><i class="fa fa-pencil-square-o text-[#E65F2B]" aria-hidden="true"></i></button>
+                                            </a>
+                                                                            <form id="deleteForm" action="/Contributions/DeleteConfirmed/id=${contribution.contribution.id}" method="post">
+                                                <input type="hidden" id="id" name="id" value="${contribution.contribution.id}">
+                                                        <button type="submit" class="btn btn-danger py-2 text-[#F20000]" onclick="return confirm('Are you sure you want to delete ${contribution.contribution.title} contribution?')"><i class="fa fa-trash text-center " aria-hidden="true"></i></button>
+                                            </form>
+                                                    </div>
+
+                                        </td>
+                                    </tr>`;
+                        $('#table').append(row);
+                    });
+                } else {
+                    $('#table').append(`<tr><td colspan="7" class="text-center">No data found for ${title}.</td></tr>`);
+                }
+            }
+        })
+    </script>
+}

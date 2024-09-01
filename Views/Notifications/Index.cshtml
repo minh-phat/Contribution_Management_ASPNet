@@ -1,0 +1,40 @@
+﻿@model IEnumerable<SchoolProject1640.Models.Notification>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<div class="p-10 text-black sm:px-0 h-screen">
+    <div class="px-5 sm:px-0 w-full h-full">
+        <div class="w-full h-[700px] flex flex-col bg-[#F2EAE5] mb-10 px-5 rounded-xl py-3">
+            <div class="w-full text-center font-bold text-[50px]">Notifications</div>
+
+            <div class="mt-5 h-[600px] overflow-y-scroll whitespace-nowrap scroll-smooth">
+                <table class="w-full">
+                    <thead>
+                        <tr class="w-full">
+                            <th class="w-[%] text-left text-xl"> Message </th>
+                            <th class="w-[%] text-left text-xl"> SendBy </th>
+                            <th class="w-[%] text-left text-xl"> DateTime </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="py-2"> @Html.DisplayFor(modelItem => item.Message)</td>
+                                <td>@Html.DisplayFor(modelItem => item.SendBy)</td>
+                                <td>@Html.DisplayFor(modelItem => item.DateTime)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+

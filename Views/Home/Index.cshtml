@@ -1,0 +1,357 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@model IEnumerable<SchoolProject1640.Models.Contribution>
+
+@{
+    ViewData["Title"] = "Index";
+    var getFacultyOfStudent = ViewBag.getFacultyOfStudent;
+    var articles = ViewBag.listArt as IEnumerable<Article>;
+    var getId = ViewBag.idUser;
+    var listNameUser = ViewBag.listNameUSer as IEnumerable<ApplicationUser>;
+    var listNameFacuties = ViewBag.listNameFaculty as IEnumerable<Faculty>;
+
+}
+
+
+@* STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT *@
+@if (User.IsInRole("Guest"))
+{
+    <div class="grid gap-10 grid-cols-1 px-10 py-10 text-black sm:px-0">
+        @foreach (var item in Model)
+        {
+            @if (item.Faculty == getFacultyOfStudent)
+            {
+
+
+                <div class="bg-[#F2EAE5] h-[900px] p-2 rounded-2xl space-y-5 ">
+                    <div class="flex justify-between items-center">
+                        <div class="text-2xl font-bold px-3">
+                            @foreach (var name in listNameFacuties)
+                            {
+                                @if (@name.Id == item.Faculty)
+                                {
+                                    @name.Name
+                                }
+                            }
+                            - Top
+                        </div>
+                        <div class="text-xl px-3 text-[#F20000]">
+                            <a>
+                                @Html.DisplayFor(modelItem => item.FinalClosureDate)
+                            </a>
+                        </div>
+
+                    </div>
+                    @if (articles != null)
+                    {
+                        <div class=" px-5 w-full h-[80%] overflow-y-scroll whitespace-nowrap scroll-smooth">
+                            <div class="grid gap-10 grid-cols-4 w-full h-full  lg:grid-cols-2 ">
+                                @foreach (var art in articles)
+                                {
+                                    if (art.ContributionId == item.Id)
+                                    {
+                                        @if (art.isPublicForGuest == true)
+                                        {
+                                            <form asp-action="ViewFile" asp-controller="Articles" method="post">
+                                                <input type="hidden" name="fileName" value="@art.FileName" />
+                                                <button type="submit" class="w-[250px] h-[330px]  px-2 py-2 bg-[#EBDFD7] rounded-2xl">
+                                                    <div class="h-[250px] w-[250px] size-fit rounded-2xl "> 
+                                                        <img width="250px" height="250px" class="w-[230px] h-[250px] rounded-2xl" src="/imageArticle/@art.Image" /></div>
+                                                    <div class="h-[25%] w-full ">
+                                                        <div class=" w-full h-full ">
+                                                            <div class="h-[25%] text-[11px] text-right">
+                                                                @art.CreatedAt
+                                                            </div>
+                                                            <div class="h-[75%] font-bold overflow-ellipsis whitespace-normal ">@art.Title
+                                                            </div>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </button>
+                                            </form>
+                                        }
+                                    }
+                                }
+                            </div>
+                        </div>
+                    }
+
+                </div>
+
+
+            }
+        }
+    </div>
+
+}
+@if (User.IsInRole("Student") || User.IsInRole("Coordinator"))
+{
+    <div class="grid gap-10 grid-cols-1 px-10 py-10 text-black sm:px-0">
+        @foreach (var item in Model)
+        {
+            @if (item.Faculty == getFacultyOfStudent)
+            {
+                <div class="bg-[#F2EAE5] h-[900px] p-2 rounded-2xl space-y-5 ">
+                    <div class="flex justify-between items-center">
+                        <div class="text-2xl font-bold px-3">
+                            @foreach (var name in listNameFacuties)
+                            {
+                                @if (@name.Id == item.Faculty)
+                                {
+                                    @name.Name
+                                }
+                            }
+                            - Top
+                        </div>
+                        <div class="text-xl px-3 text-[#F20000]">
+                            <a>
+                                @Html.DisplayFor(modelItem => item.FinalClosureDate)
+                            </a>
+                        </div>
+
+                    </div>
+                    @if (articles != null)
+                    {
+                        <div class=" px-5 w-full h-[80%] overflow-y-scroll whitespace-nowrap scroll-smooth">
+                            <div class="grid gap-10 grid-cols-4 w-full h-full  lg:grid-cols-2 ">
+                                @foreach (var art in articles)
+                                {
+                                    if (art.ContributionId == item.Id)
+                                    {
+                                        <form asp-action="ViewFile" asp-controller="Articles" method="post">
+                                            <input type="hidden" name="fileName" value="@art.FileName" />
+                                            <button type="submit" class="w-[250px] h-[330px]  px-2 py-2 bg-[#EBDFD7] rounded-2xl">
+                                                <div class="h-[250px] w-[250px] size-fit rounded-2xl "> <img width="250px" height="250px" class="w-[230px] h-[250px] rounded-2xl" src="/imageArticle/@art.Image" /></div>
+                                                <div class="h-[25%] w-full ">
+                                                    <div class=" w-full h-full ">
+                                                        <div class="h-[25%] text-[11px] text-right">
+                                                            @art.CreatedAt
+                                                        </div>
+                                                        <div class="h-[75%] font-bold overflow-ellipsis whitespace-normal ">
+                                                            @art.Title
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </button>
+                                        </form>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    }
+
+                </div>
+
+            }
+        }
+    </div>
+
+}
+
+@* @if (User.IsInRole("Administrator") )
+{
+    <div class="px-16 py-8 w-full h-[900px] flex text-black  sm:px-1">
+
+        <div class="w-full h-full bg-[#EBDFD7] py-5 px-3 ">
+
+            <div class="w-full h-[90%] space-y-10 ">
+                <div class="px-5 py-5 w-full h-[200px] grid grid-cols-4 text-black  lg:grid-cols-2 lg:h-[400px] gap-4 ">
+                    <div class="w-full h-full bg-[#F2EAE5] flex flex-col space-y-1 px-3 py-3 rounded-xl">
+                        <div class="bg-[#D398E7] rounded-full w-14 h-14 flex items-center justify-center">
+                            <Icon class="w-10 h-10" name="mdi:file-outline" />
+                        </div>
+
+                        <div class="text-[#797979] font-medium text-[18px]">
+                            Total articles
+                        </div>
+                        <div class="text-[40px] font-bold">500</div>
+                    </div>
+                    <div class="w-full h-full bg-[#F2EAE5] flex flex-col space-y-1 px-3 py-3 rounded-xl">
+                        <div class="bg-[#E89271] rounded-full w-14 h-14 flex items-center justify-center">
+                            <Icon class="w-10 h-10" name="ph:bag-bold" />
+                        </div>
+                        <div class="text-[#797979] font-medium text-[18px]">
+                            Total Facuties
+                        </div>
+                        <div class="text-[40px] font-bold">500</div>
+                    </div>
+                    <div class="w-full h-full bg-[#F2EAE5] flex flex-col space-y-1 px-3 py-3 rounded-xl">
+                        <div class="bg-[#70A1E5] rounded-full w-14 h-14 flex items-center justify-center">
+                            <Icon class="w-10 h-10" name="icon-park-outline:peoples" />
+                        </div>
+                        <div class="text-[#797979] font-medium text-[18px]">
+                            Total Student
+                        </div>
+                        <div class="text-[40px] font-bold">500</div>
+                    </div>
+                    <div class="w-full h-full bg-[#F2EAE5] flex flex-col space-y-1 px-3 py-3 rounded-xl">
+                        <div class="bg-[#70A1E5] rounded-full w-14 h-14 flex items-center justify-center">
+                            <Icon class="w-10 h-10" name="icon-park-outline:peoples" />
+                        </div>
+                        <div class="text-[#797979] font-medium text-[18px]">
+                            Total Student
+                        </div>
+                        <div class="text-[40px] font-bold">500</div>
+                    </div>
+                </div>
+                <div class="px-5 w-full  flex space-x-5 lg:flex-col lg:space-y-5 lg:space-x-0">
+                    <div class="bg-[#F2EAE5] w-[45%] h-[400px] p-5 rounded-xl space-y-4 text-center lg:w-[100%] ">
+                        <div class="font-bold text-[20px] text-center">
+                            Bảng Xếp Hạng Bé Khỏe Bé Ngoan
+                        </div>
+                        <table class="w-full">
+                            <thead>
+                                <tr class="w-full">
+                                    <th class="w-[20%] text-center">Top</th>
+                                    <th class="w-[35%] text-center">Name Author</th>
+                                    <th class="w-[35%] text-center">Email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr >
+                                    <td>{{ key + 1 }}</td>
+                                    <td>{{ a.nameAuthor }}</td>
+                                    <td>{{ a.email }}</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div
+                         class="bg-[#F2EAE5] w-[45%] h-[400px] p-5 rounded-xl space-y-4 text-center lg:w-[100%]  ">
+                        <div class="font-bold text-[20px] text-center">
+                            Bảng Xếp Hạng Giáo Viên Chăm Ngoan
+                        </div>
+                        <table class="w-full">
+                            <thead>
+                                <tr class="w-full">
+                                    <th class="w-[30%] text-center">Top</th>
+                                    <th class="w-[35%] text-center">Name Author</th>
+                                    <th class="w-[35%] text-center">Email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(a, key) in x.datas.slice(0, 10)">
+                                    <td>{{ key + 1 }}</td>
+                                    <td>{{ a.nameAuthor }}</td>
+                                    <td>{{ a.email }}</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+} *@
+
+
+
+
+@if (User.IsInRole("Manager") || User.IsInRole("Administrator"))
+{
+    <div class="grid gap-10 grid-cols-1 px-10 py-10 text-black sm:px-0">
+        @foreach (var item in Model)
+        {
+
+            <div class="bg-[#F2EAE5] h-[900px] p-2 rounded-2xl space-y-5 ">
+                <div class="flex justify-between items-center">
+                    <div class="text-2xl font-bold px-3">
+                        @foreach (var name in listNameFacuties)
+                        {
+                            @if (@name.Id == item.Faculty)
+                            {
+                                @name.Name
+                            }
+                        }
+                        - Top
+                    </div>
+                    <div class="text-xl px-3 text-[#F20000]">
+                        <a>
+                            @Html.DisplayFor(modelItem => item.FinalClosureDate)
+                        </a>
+                    </div>
+
+                </div>
+                @if (articles != null)
+                {
+                    <div class=" px-5 w-full h-[80%] overflow-y-scroll whitespace-nowrap scroll-smooth">
+                        <div class="grid gap-10 grid-cols-4 w-full h-full  lg:grid-cols-2 ">
+                            @foreach (var art in articles)
+                            {
+                                if (art.ContributionId == item.Id)
+                                {
+                                    <form asp-action="ViewFile" asp-controller="Articles" method="post">
+                                        <input type="hidden" name="fileName" value="@art.FileName" />
+                                        <button type="submit" class="w-[250px] h-[330px]  px-2 py-2 bg-[#EBDFD7] rounded-2xl">
+                                            <div class="h-[250px] w-[250px] size-fit rounded-2xl "> <img width="250px" height="250px" class="w-[230px] h-[250px] rounded-2xl" src="/imageArticle/@art.Image" /></div>
+                                            <div class="h-[25%] w-full ">
+                                                <div class=" w-full h-full ">
+                                                    <div class="h-[25%] text-[11px] text-right">
+                                                        @art.CreatedAt
+                                                    </div>
+                                                    <div class="h-[75%] font-bold overflow-ellipsis whitespace-normal ">
+                                                        @art.Title
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </button>
+                                    </form>
+                                }
+                            }
+                        </div>
+                    </div>
+                }
+
+            </div>
+
+        }
+    </div>
+}
+
+
+
+@if (ViewBag.notifications != null)
+{
+    @if (ViewBag.notifications.Count > 0)
+    {
+        <script type="text/javascript">
+            const notyf = new Notyf({
+                duration: 5000,
+                dismissible: true,
+                types: [
+                    {
+                        type: 'info',
+                        background: 'blue',
+                        icon: false
+                    }
+                ],
+            });
+
+            var notifications = @Html.Raw(Json.Serialize(ViewBag.notifications));
+            notifications.forEach((noti) => {
+                if (noti.isRead == false) {
+                    var notification = notyf.open({
+                        type: 'info',
+                        message: noti.message
+                    });
+                    notification.on('dismiss', () => {
+                        connection.invoke("DismissNotification", noti.id).catch(function (err) {
+                            return console.error(err);
+                        });
+                    });
+                    notification.on('click', () => {
+                        window.location.href = '/Notifications/Index'
+                        connection.invoke("DismissNotification", noti.id).catch(function (err) {
+                            return console.error(err);
+                        });
+                    });
+                }
+            })
+        </script>
+    }
+}

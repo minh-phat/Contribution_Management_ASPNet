@@ -1,0 +1,151 @@
+@model SchoolProject1640.Models.ApplicationUser
+
+@{
+    ViewData["Title"] = "Edit Profile";
+}
+
+@*<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="">
+                <input type="file" name="files" asp-for="Image" id="avatar-input" onchange="loadAvatar(event)" class="form-control visually-hidden" aria-required="true" />
+                <label for="avatar-input" class="avatar-label" asp-for="Image">
+                    <img id="avatar-preview" src="/imageUser/@Model.Image" alt="Avatar">
+                </label>
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3"></div>
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FacultyId" class="control-label"></label>
+                <input asp-for="FacultyId" class="form-control" />
+                <span asp-validation-for="FacultyId" class="text-danger"></span>
+            </div>
+            <!-- Add more properties as needed -->
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>*@
+
+<div class="row">
+    <div class="px-16 py-8 w-full h-[900px] flex text-black  sm:px-0">
+        <div class="w-full h-full bg-[#EBDFD7] py-5 px-3 sm:px-0">
+            <div class="w-full h-[90%] ">
+                <div class="w-full flex items-center justify-center py-10 ">
+                    @*<div class="flex flex-col items-center justify-center space-y-7 bg-[#F2EAE5] p-10 rounded-2xl">*@
+                    <form asp-action="Edit" class="flex flex-col items-center justify-center space-y-7 bg-[#F2EAE5] p-10 rounded-2xl sm:px-14" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
+
+                        <div class="">
+                            <input type="file" name="files" asp-for="Image" id="avatar-input" onchange="loadAvatar(event)" class="form-control visually-hidden" aria-required="true" />
+                            <label for="avatar-input" class="avatar-label" asp-for="Image">
+                                <img id="avatar-preview" src="/imageUser/@Model.Image" alt="Avatar">
+                            </label>
+                            <span asp-validation-for="Image" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating mb-3"></div>
+
+
+                        <div class="text-[16px] space-y-1 ">
+                            <div class="text-[#828181]">
+                                <label asp-for="FirstName" class="control-label"></label>
+                            </div>
+                            <div class="flex items-center justify-end">
+                                <input asp-for="FirstName" class="h-[40px] w-[380px] bg-[#F1F3F6] px-5 rounded-lg  text-black" />
+                                <div class="absolute w-[40px] h-[40px] bg-[#FD7401] flex items-center justify-center rounded-lg">
+                                    <i class="fa fa-user" aria-hidden="true"></i>
+
+                                </div>
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+                        </div>
+
+
+                        <div class="text-[16px] space-y-1 ">
+                            <div class="text-[#828181]">
+                                <label asp-for="LastName">Last Name</label>
+                            </div>
+                            <div class="flex items-center justify-end">
+                                <input asp-for="LastName" class="h-[40px] w-[380px] bg-[#F1F3F6] px-5 rounded-lg  text-black" />
+                                <div class="absolute w-[40px] h-[40px] bg-[#FD7401] flex items-center justify-center rounded-lg">
+                                    <i class="fa fa-user" aria-hidden="true"></i>
+
+                                </div>
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <button id="registerSubmit" type="submit" class="space-x-2 pt-3" type="submit">
+                            <div class="form-group w-[380px] text-[#FD7401] border-2 border-[#FD7401] text-[20px] font-bold rounded-[10px] h-[45px] flex items-center justify-center">
+                                <input type="submit" value="Save" class="btn btn-primary" />
+                            </div>
+                        </button>
+                    </form>
+                    @*</div>*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        <style>
+            .avatar-container {
+                display: flex;
+                justify-content: center; /* Center horizontally */
+                align-items: center; /* Center vertically */
+                height: 200px; /* Adjust height as needed */
+            }
+
+            .avatar-label {
+                display: block;
+                position: relative;
+                width: 150px; /* Adjust width of the avatar */
+                height: 150px; /* Adjust height of the avatar */
+                overflow: hidden;
+                border-radius: 50%; /* Ensures the avatar is circular */
+            }
+
+                .avatar-label img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+
+            .visually-hidden {
+                position: absolute;
+                width: 1px;
+                height: 1px;
+                padding: 0;
+                margin: -1px;
+                overflow: hidden;
+                clip: rect(0, 0, 0, 0);
+                border: 0;
+            }
+
+        </style>
+
+        <script>
+            // Preview avatar when selected
+            function loadAvatar(event) {
+                var reader = new FileReader();
+                reader.onload = function () {
+                    $('#avatar-preview').attr('src', reader.result);
+                };
+                reader.readAsDataURL(event.target.files[0]);
+                // Show the avatar preview after selecting an image
+                $('#avatar-preview').show();
+            }
+        </script>

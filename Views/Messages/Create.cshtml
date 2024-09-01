@@ -1,0 +1,53 @@
+﻿@model SchoolProject1640.Models.Message
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Message</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="AccountID" class="control-label"></label>
+                <input asp-for="AccountID" class="form-control" />
+                <span asp-validation-for="AccountID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ArtID" class="control-label"></label>
+                <input asp-for="ArtID" class="form-control" />
+                <span asp-validation-for="ArtID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Mess" class="control-label"></label>
+                <input asp-for="Mess" class="form-control" />
+                <span asp-validation-for="Mess" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedAt" class="control-label"></label>
+                <input asp-for="CreatedAt" class="form-control" />
+                <span asp-validation-for="CreatedAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UpdatedAt" class="control-label"></label>
+                <input asp-for="UpdatedAt" class="form-control" />
+                <span asp-validation-for="UpdatedAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
